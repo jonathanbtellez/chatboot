@@ -9,5 +9,6 @@ import lombok.Setter;
 @Getter
 @Builder
 public class ChatRequest {
+    private String modelName;
     private String content;
 }

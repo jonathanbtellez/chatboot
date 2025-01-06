@@ -34,6 +34,7 @@ public class ChatMapper {
     public static ChatRequest fromChatRequestDto(final ChatRequestDto chatRequestDto) {
         log.info("Mapping ChatRequestDto to ChatRequest.");
         return ChatRequest.builder()
+                .modelName(chatRequestDto.getModelName())
                 .content(chatRequestDto.getContent())
                 .build();
     }

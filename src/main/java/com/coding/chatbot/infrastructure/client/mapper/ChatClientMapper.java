@@ -5,12 +5,14 @@ import com.coding.chatbot.domain.model.ChatResponse;
 import com.coding.chatbot.infrastructure.client.entity.ChatRequestInfo;
 import com.coding.chatbot.infrastructure.client.entity.ChatResponseInfo;
 import com.coding.chatbot.infrastructure.client.entity.MessageInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 
 /**
  * Mapper for converting between ChatRequest and ChatResponse domain models and their corresponding client entities.
  */
+@Slf4j
 public class ChatClientMapper {
 
     /**
@@ -20,8 +22,9 @@ public class ChatClientMapper {
      * @return the corresponding ChatRequestInfo
      */
     public static ChatRequestInfo fromChatRequest(final ChatRequest chatRequest) {
+       log.info("Mapping ChatRequest to ChatRequestInfo.");
         return ChatRequestInfo.builder()
-                .model("gemma2-9b-it")
+                .model(chatRequest.getModelName())
                 .messages(Collections.singletonList(MessageInfo.builder()
                         .role("user")
                         .content(chatRequest.getContent())

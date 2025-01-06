@@ -3,6 +3,7 @@ package com.coding.chatbot.application.controller;
 import com.coding.chatbot.application.dto.ChatRequestDto;
 import com.coding.chatbot.application.mapper.ChatMapper;
 import com.coding.chatbot.domain.service.ChatService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
-
     private final ChatService chatService;
+
 
     /**
      * Handles chat requests.
@@ -30,7 +31,8 @@ public class ChatController {
      * @return a ResponseEntity containing the chat response
      */
     @PostMapping
-    public ResponseEntity<?> chat(@RequestBody ChatRequestDto chatRequestDto) {
+    public ResponseEntity<?> chat(
+           @Valid @RequestBody ChatRequestDto chatRequestDto) {
         log.info("Chat request received: {}", chatRequestDto);
         return ResponseEntity.ok().body(ChatMapper.fromChatResponse(chatService.getChatResponse(ChatMapper.fromChatRequestDto(chatRequestDto))));
     }
