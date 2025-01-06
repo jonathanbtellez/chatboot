@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: chatboot
+
+logging:
+    level:
+        feign: DEBUG
+        org.springframework.cloud.openfeign: DEBUG
+
+grop:
+  api:
+    key: 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
+    url: https://api.groq.com/openai/v1/chat/completions
