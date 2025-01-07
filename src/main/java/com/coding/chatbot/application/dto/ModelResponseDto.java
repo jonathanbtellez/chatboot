@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class ChatResponseDto {
-    private String message;
+public class ModelResponseDto {
+    public String id;
+    public String owned_by;
+    public boolean active;
 }

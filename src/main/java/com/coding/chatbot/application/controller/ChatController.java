@@ -1,16 +1,15 @@
 package com.coding.chatbot.application.controller;
 
 import com.coding.chatbot.application.dto.ChatRequestDto;
+import com.coding.chatbot.application.dto.SuccessResponseDto;
 import com.coding.chatbot.application.mapper.ChatMapper;
+import com.coding.chatbot.application.mapper.SuccessResponseMapper;
 import com.coding.chatbot.domain.service.ChatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -31,9 +30,26 @@ public class ChatController {
      * @return a ResponseEntity containing the chat response
      */
     @PostMapping
-    public ResponseEntity<?> chat(
+    public ResponseEntity<SuccessResponseDto<?>> chat(
            @Valid @RequestBody ChatRequestDto chatRequestDto) {
-        log.info("Chat request received: {}", chatRequestDto);
-        return ResponseEntity.ok().body(ChatMapper.fromChatResponse(chatService.getChatResponse(ChatMapper.fromChatRequestDto(chatRequestDto))));
+        log.info("Chat request received");
+        return ResponseEntity.ok()
+                .body(
+                        SuccessResponseMapper
+                                .fromOkResponse(ChatMapper.fromChatResponse(chatService.getChatResponse(ChatMapper.fromChatRequestDto(chatRequestDto))))
+                );
+    }
+
+    /**
+     * Retrieves the available models.
+     *
+     * @return a ResponseEntity containing the available models
+     */
+    @GetMapping("/models")
+    public ResponseEntity<SuccessResponseDto<?>> getModels() {
+        log.info("Request to get models received.");
+        return ResponseEntity.ok().body(
+                SuccessResponseMapper.fromOkResponse(ChatMapper.fromModelList(chatService.getModels()))
+        );
     }
 }

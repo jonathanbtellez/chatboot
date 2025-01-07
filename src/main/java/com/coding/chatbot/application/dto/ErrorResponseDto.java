@@ -1,12 +1,13 @@
-package com.coding.chatbot.domain.model;
+package com.coding.chatbot.application.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class ChatResponse {
+public class ErrorResponseDto {
+    private String status;
     private String message;
 }

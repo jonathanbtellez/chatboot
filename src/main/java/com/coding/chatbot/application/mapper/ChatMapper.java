@@ -2,9 +2,13 @@ package com.coding.chatbot.application.mapper;
 
 import com.coding.chatbot.application.dto.ChatRequestDto;
 import com.coding.chatbot.application.dto.ChatResponseDto;
+import com.coding.chatbot.application.dto.ModelResponseDto;
 import com.coding.chatbot.domain.model.ChatRequest;
 import com.coding.chatbot.domain.model.ChatResponse;
+import com.coding.chatbot.domain.model.Model;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * Mapper for converting between ChatRequestDto and domain models.
@@ -37,5 +41,20 @@ public class ChatMapper {
                 .modelName(chatRequestDto.getModelName())
                 .content(chatRequestDto.getContent())
                 .build();
+    }
+
+    /**
+     * Converts a ModelList to a list of ModelResponseDto.
+     *
+     * @param modelList the model list
+     * @return the corresponding list of ModelResponseDto
+     */
+    public  static List<ModelResponseDto> fromModelList(List<Model> modelList) {
+        log.info("Mapping ModelList to ModelResponseDto.");
+        return modelList.stream().map(model -> ModelResponseDto.builder()
+                .id(model.getId())
+                .owned_by(model.getOwned_by())
+                .active(model.isActive())
+                .build()).toList();
     }
 }

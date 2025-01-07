@@ -2,11 +2,9 @@ package com.coding.chatbot.infrastructure.service;
 
 import com.coding.chatbot.domain.model.ChatRequest;
 import com.coding.chatbot.domain.model.ChatResponse;
+import com.coding.chatbot.domain.model.Model;
 import com.coding.chatbot.infrastructure.client.ChatFeingClient;
-import com.coding.chatbot.infrastructure.client.entity.ChatRequestInfo;
-import com.coding.chatbot.infrastructure.client.entity.ChatResponseInfo;
-import com.coding.chatbot.infrastructure.client.entity.ChoiceInfo;
-import com.coding.chatbot.infrastructure.client.entity.MessageInfo;
+import com.coding.chatbot.infrastructure.client.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,8 +38,11 @@ class ChatServiceImplTest {
                         .build()))
                 .build();
 
-        ChatRequest request = ChatRequest.builder().content("text").build();
+        ChatRequest request = ChatRequest.builder().modelName("llama").content("text").build();
+        ModelInfo model = ModelInfo.builder().id("1").owned_by("test").active(true).build();
+
         // Arrange
+        when(chatFeingClient.getModel(any(String.class))).thenReturn(model);
         when(chatFeingClient.getChatResponse(any(ChatRequestInfo.class))).thenReturn(chatResponseInfo);
         // Act
         ChatResponse chatResponseCurrent = chatServiceImpl.getChatResponse(request);
@@ -48,6 +50,34 @@ class ChatServiceImplTest {
         // Assert
         assertEquals(response.getMessage(), chatResponseCurrent.getMessage());
 
+    }
+
+    @Test
+    void testGetModels() {
+        // Arrange
+        List<Model> models = List.of(
+                Model.builder().id("1").owned_by("test").active(true).build(),
+                Model.builder().id("2").owned_by("test").active(true).build()
+        );
+
+        ModelsInfo modelInfo = ModelsInfo.builder()
+                .object("list")
+                .data(
+                        models.stream().map(model -> ModelInfo.builder()
+                                .id(model.getId())
+                                .owned_by(model.getOwned_by())
+                                .active(model.isActive())
+                                .build()).toList()
+                )
+                .build();
+
+        when(chatFeingClient.getModels()).thenReturn(modelInfo);
+        // Act
+        List<Model> modelsCurrent = chatServiceImpl.getModels();
+
+        // Assert
+        assertEquals(models.size(), modelsCurrent.size());
+        verify(chatFeingClient, times(1)).getModels();
     }
 
 }

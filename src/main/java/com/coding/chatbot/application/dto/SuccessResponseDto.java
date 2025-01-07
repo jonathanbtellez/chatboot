@@ -4,9 +4,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class ChatResponseDto {
-    private String message;
+public class SuccessResponseDto<T> {
+    private String status;
+    private T data;
 }

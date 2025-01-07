@@ -10,5 +10,5 @@ logging:
 grop:
   api:
     key: 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
-    url: https://api.groq.com/openai/v1/chat/completions
+    url: https://api.groq.com/openai/v1
     defaulModel: "gemma2-9b-it"
